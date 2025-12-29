@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Island - Minecraft Education</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            color: #fff;
+            transition: background 0.5s;
+            image-rendering: pixelated;
+        }
+
+        body.day-mode {
+            background: linear-gradient(180deg, #87CEEB 0%, #90EE90 50%, #8B7355 100%);
+        }
+
+        body.night-mode {
+            background: linear-gradient(180deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 4px solid #8B4513;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+        }
+
+        .header h1 {
+            color: #FFD700;
+            font-size: 2rem;
+            text-shadow: 3px 3px 0 #000;
+            letter-spacing: 2px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: 3px solid #000;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+
+        .btn-overworld {
+            background: #90EE90;
+            color: #2F4F2F;
+        }
+
+        .btn-nether {
+            background: #8B0000;
+            color: #FFD700;
+        }
+
+        .btn-end {
+            background: #4B0082;
+            color: #DDA0DD;
+        }
+
+        .btn-admin {
+            background: #FFD700;
+            color: #000;
+        }
+
+        .day-night-toggle {
+            background: #1a1a1a;
+            border: 3px solid #000;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Minecraft Style Container */
+        .mc-container {
+            background: rgba(0, 0, 0, 0.7);
+            border: 4px solid #8B4513;
+            padding: 2rem;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+        }
+
+        .mc-title {
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            text-shadow: 3px 3px 0 #000;
+            text-align: center;
+        }
+
+        /* World Selection */
+        .world-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .world-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid #8B4513;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+        }
+
+        .world-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0 rgba(0,0,0,0.5);
+        }
+
+        .world-card.active {
+            border-color: #FFD700;
+            box-shadow: 0 0 20px #FFD700;
+        }
+
+        .world-card.overworld {
+            background: linear-gradient(135deg, #228B22, #90EE90);
+        }
+
+        .world-card.nether {
+            background: linear-gradient(135deg, #8B0000, #DC143C);
+        }
+
+        .world-card.end {
+            background: linear-gradient(135deg, #4B0082, #8B008B);
+        }
+
+        .world-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        .world-title {
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .world-description {
+            text-align: center;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        /* Island Grid */
+        .islands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .island-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #8B4513;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .island-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+        }
+
+        .island-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(70%);
+        }
+
+        .island-card.completed {
+            border-color: #FFD700;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(0,0,0,0.8));
+        }
+
+        .island-level {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #FFD700;
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+        }
+
+        .island-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .island-name {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-block {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid #8B4513;
+            padding: 1.5rem;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+        }
+
+        .stat-block.diamond {
+            border-color: #5DADE2;
+        }
+
+        .stat-block.emerald {
+            border-color: #50C878;
+        }
+
+        .stat-block.redstone {
+            border-color: #DC143C;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+            text-shadow: 3px 3px 0 #000;
+            color: #FFD700;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        /* Progress Bars */
+        .progress-list {
+            margin-top: 2rem;
+        }
+
+        .progress-item {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #8B4513;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+        }
+
+        .progress-bar-container {
+            width: 50%;
+            height: 30px;
+            background: #2F4F2F;
+            border: 3px solid #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #50C878, #90EE90);
+            transition: width 0.5s;
+            border-right: 3px solid #000;
+        }
+
+        /* Students Table */
+        .mc-table {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid #8B4513;
+            border-collapse: collapse;
+        }
+
+        .mc-table th {
+            background: #2F4F2F;
+            color: #FFD700;
+            padding: 1rem;
+            text-align: left;
+            border: 3px solid #000;
+            text-transform: uppercase;
+        }
+
+        .mc-table td {
+            padding: 1rem;
+            border: 3px solid #000;
+        }
+
+        .mc-table tr:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 6px solid #8B4513;
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            color: #FFD700;
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        .close-modal {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #DC143C;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .close-modal:hover {
+            color: #FF0000;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            background: rgba(47, 79, 47, 0.3);
+            border: 3px solid #2F4F2F;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .task-item:hover {
+            background: rgba(47, 79, 47, 0.5);
+            transform: translateX(5px);
+        }
+
+        .task-item.completed {
+            background: rgba(80, 200, 120, 0.3);
+            border-color: #50C878;
+        }
+
+        .task-checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #FFD700;
+            background: #2F4F2F;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .task-checkbox.checked {
+            background: #50C878;
+            color: #000;
+        }
+
+        /* Minecraft themed scrollbar */
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2F4F2F;
+            border: 2px solid #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8B4513;
+            border: 2px solid #000;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A0522D;
+        }
+
+        .mc-description {
+            background: rgba(47, 79, 47, 0.5);
+            border: 3px solid #2F4F2F;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .mc-button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="header">
+        <h1>⛏️ CODING ISLAND ⛏️</h1>
+        <div class="nav-buttons">
+            <button class="btn btn-overworld" onclick="showView('worlds')">Welten</button>
+            <button class="btn btn-nether" onclick="showView('student')">Spieler Stats</button>
+            <button class="btn btn-admin" onclick="showView('admin')">Admin</button>
+            <button class="day-night-toggle" onclick="toggleDayNight()" id="dayNightBtn">☀️</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Worlds View -->
+        <div id="worlds" class="view active">
+            <div class="mc-container">
+                <h2 class="mc-title">⚔️ DEINE CODING REISE ⚔️</h2>
+                <div class="world-selector">
+                    <div class="world-card overworld" onclick="openIsland(islands[0])">
+                        <div class="world-icon">🏠</div>
+                        <div class="world-title">SPAWN PUNKT</div>
+                        <div class="world-description">Level 0: Minecraft Education Setup</div>
+                    </div>
+                    <div class="world-card nether" onclick="selectWorld('coding')">
+                        <div class="world-icon">🧱</div>
+                        <div class="world-title">BLOCK CODING INSEL</div>
+                        <div class="world-description">Level 1-15: MakeCode Block Programmierung</div>
+                    </div>
+                </div>
+
+                <div class="islands-grid" id="islandsGrid" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Student Dashboard View -->
+        <div id="student" class="view">
+            <div class="mc-container">
+                <h2 class="mc-title">📊 SPIELER STATISTIKEN 📊</h2>
+                <div class="stats-grid">
+                    <div class="stat-block diamond">
+                        <div class="stat-label">💎 Abgeschlossene Levels</div>
+                        <div class="stat-value" id="completedLessons">0/16</div>
+                    </div>
+                    <div class="stat-block emerald">
+                        <div class="stat-label">📈 Gesamtfortschritt</div>
+                        <div class="stat-value" id="totalProgress">0%</div>
+                    </div>
+                    <div class="stat-block redstone">
+                        <div class="stat-label">🗺️ Aktuelle Welt</div>
+                        <div class="stat-value" style="font-size: 1.5rem;" id="currentWorld">Oberwelt</div>
+                    </div>
+                </div>
+
+                <div class="progress-list">
+                    <h3 class="mc-title">🎯 DEIN FORTSCHRITT 🎯</h3>
+                    <div id="studentProgress"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard View -->
+        <div id="admin" class="view">
+            <div class="mc-container">
+                <h2 class="mc-title">👑 ADMIN KONSOLE 👑</h2>
+                <div class="stats-grid">
+                    <div class="stat-block diamond">
+                        <div class="stat-label">👥 Registrierte Spieler</div>
+                        <div class="stat-value">3</div>
+                    </div>
+                    <div class="stat-block emerald">
+                        <div class="stat-label">📊 Ø Fortschritt</div>
+                        <div class="stat-value" id="avgProgress">0%</div>
+                    </div>
+                    <div class="stat-block redstone">
+                        <div class="stat-label">🎮 Aktive Levels</div>
+                        <div class="stat-value">16</div>
+                    </div>
+                </div>
+
+                <h3 class="mc-title" style="margin-top: 2rem;">📋 SPIELERÜBERSICHT 📋</h3>
+                <table class="mc-table">
+                    <thead>
+                        <tr>
+                            <th>🎮 Spieler</th>
+                            <th>📈 Fortschritt</th>
+                            <th>⏰ Letzte Aktivität</th>
+                            <th>✨ Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Island Details -->
+    <div class="modal" id="islandModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <span class="close-modal" onclick="closeModal()">✖</span>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const islands = [
+            // Spawn Punkt
+            { id: 0, name: "Spawn Punkt", emoji: "🏠", world: "spawn", desc: "Windows & Minecraft Education Setup" },
+            
+            // Block Coding Insel (1-15)
+            { id: 1, name: "Crafting Table", emoji: "🔨", world: "coding", desc: "MakeCode Grundlagen" },
+            { id: 2, name: "Mine Entrance", emoji: "⛏️", world: "coding", desc: "Sequenzen & Befehle" },
+            { id: 3, name: "Redstone Circuit", emoji: "🔴", world: "coding", desc: "Schleifen" },
+            { id: 4, name: "Village Gate", emoji: "🚪", world: "coding", desc: "Bedingungen" },
+            { id: 5, name: "Enchanting Room", emoji: "✨", world: "coding", desc: "Variablen" },
+            { id: 6, name: "Portal Hub", emoji: "🌀", world: "coding", desc: "Funktionen" },
+            { id: 7, name: "Fortress Bridge", emoji: "🏰", world: "coding", desc: "Arrays & Listen" },
+            { id: 8, name: "Blaze Tower", emoji: "🔥", world: "coding", desc: "Events" },
+            { id: 9, name: "Soul Sand Valley", emoji: "👻", world: "coding", desc: "Debugging" },
+            { id: 10, name: "Bastion Ruins", emoji: "🏛️", world: "coding", desc: "Koordinaten" },
+            { id: 11, name: "End Gateway", emoji: "🌌", world: "coding", desc: "Logik & Operatoren" },
+            { id: 12, name: "Chorus Garden", emoji: "🎵", world: "coding", desc: "Muster & Algorithmen" },
+            { id: 13, name: "Shulker City", emoji: "📦", world: "coding", desc: "Agent Programmierung" },
+            { id: 14, name: "Dragon Arena", emoji: "🐉", world: "coding", desc: "Komplexe Projekte" },
+            { id: 15, name: "End Credits", emoji: "🏆", world: "coding", desc: "Meisterprojekt" }
+        ];
+
+        const level0Tasks = [
+            "⚙️ Windows-Grundlagen verstehen",
+            "📥 Minecraft Education herunterladen",
+            "💿 Minecraft Education installieren",
+            "🔑 Mit Studenten-Account einloggen",
+            "🌍 Code Builder aktivieren",
+            "📦 Beispielwelt herunterladen",
+            "📂 Welt importieren",
+            "🎮 Erste Schritte in der Welt"
+        ];
+
+        let currentWorldFilter = 'coding';
+        let isDayMode = true;
+        let showingIslands = false;
+
+        let progress = JSON.parse(localStorage.getItem('codingIslandProgress')) || {
+            completed: [],
+            level0Tasks: []
+        };
+
+        function saveProgress() {
+            localStorage.setItem('codingIslandProgress', JSON.stringify(progress));
+            updateDashboards();
+        }
+
+        function toggleDayNight() {
+            isDayMode = !isDayMode;
+            document.body.className = isDayMode ? 'day-mode' : 'night-mode';
+            document.getElementById('dayNightBtn').textContent = isDayMode ? '☀️' : '🌙';
+        }
+
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function selectWorld(world) {
+            currentWorldFilter = world;
+            showingIslands = true;
+            document.querySelector('.world-selector').style.display = 'none';
+            document.getElementById('islandsGrid').style.display = 'grid';
+            renderIslands();
+        }
+
+        function renderIslands() {
+            const grid = document.getElementById('islandsGrid');
+            grid.innerHTML = '';
+
+            if (!showingIslands) return;
+
+            const filteredIslands = islands.filter(i => i.world === currentWorldFilter);
+
+            filteredIslands.forEach(island => {
+                const isCompleted = progress.completed.includes(island.id);
+                const isLocked = island.id > 1 && !progress.completed.includes(island.id - 1);
+
+                const card = document.createElement('div');
+                card.className = 'island-card';
+                if (isCompleted) card.classList.add('completed');
+                if (isLocked) card.classList.add('locked');
+
+                card.innerHTML = `
+                    <div class="island-level">${island.id}</div>
+                    <div class="island-icon">${island.emoji}</div>
+                    <div class="island-name">${island.name}</div>
+                    <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">${island.desc}</div>
+                `;
+
+                if (!isLocked) {
+                    card.onclick = () => openIsland(island);
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        function openIsland(island) {
+            const modal = document.getElementById('islandModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            modalTitle.textContent = `${island.emoji} ${island.name}`;
+
+            if (island.id === 0) {
+                content.innerHTML = `
+                    <div class="mc-description">
+                        <strong>🎓 Willkommen am Spawn Point!</strong><br>
+                        Hier beginnst du deine Minecraft Education Coding-Reise. Erledige alle Aufgaben, um fortzufahren.
+                    </div>
+                    <h4 style="color: #FFD700; margin-top: 1rem; text-shadow: 2px 2px 0 #000;">📋 Aufgaben:</h4>
+                    <ul class="task-list" id="taskList"></ul>
+                `;
+
+                const taskList = document.getElementById('taskList');
+                level0Tasks.forEach((task, index) => {
+                    const li = document.createElement('li');
+                    const isChecked = progress.level0Tasks.includes(index);
+                    li.className = 'task-item';
+                    if (isChecked) li.classList.add('completed');
+                    
+                    li.innerHTML = `
+                        <div class="task-checkbox ${isChecked ? 'checked' : ''}">
+                            ${isChecked ? '✓' : ''}
+                        </div>
+                        <span>${task}</span>
+                    `;
+                    
+                    li.onclick = () => toggleTask(index);
+                    taskList.appendChild(li);
+                });
+            } else {
+                const isCompleted = progress.completed.includes(island.id);
+                content.innerHTML = `
+                    <div class="mc-description">
+                        <strong>📚 ${island.desc}</strong><br><br>
+                        Dieser Level behandelt wichtige Programmierkonzepte mit Minecraft Education MakeCode Block Coding.<br><br>
+                        <strong>🎯 Status:</strong> ${isCompleted ? '✅ Abgeschlossen' : '⏳ In Bearbeitung'}
+                    </div>
+                    <div class="mc-button-group">
+                        <button class="btn btn-overworld" style="flex: 1;" onclick="toggleCompletion(${island.id})">
+                            ${isCompleted ? '❌ Als unvollständig markieren' : '✅ Als abgeschlossen markieren'}
+                        </button>
+                    </div>
+                `;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function toggleTask(index) {
+            const taskIndex = progress.level0Tasks.indexOf(index);
+            if (taskIndex > -1) {
+                progress.level0Tasks.splice(taskIndex, 1);
+            } else {
+                progress.level0Tasks.push(index);
+            }
+
+            if (progress.level0Tasks.length === level0Tasks.length && !progress.completed.includes(0)) {
+                progress.completed.push(0);
+            }
+
+            saveProgress();
+            openIsland(islands[0]);
+        }
+
+        function toggleCompletion(islandId) {
+            const index = progress.completed.indexOf(islandId);
+            if (index > -1) {
+                progress.completed.splice(index, 1);
+            } else {
+                progress.completed.push(islandId);
+            }
+            saveProgress();
+            renderIslands();
+            openIsland(islands.find(i => i.id === islandId));
+        }
+
+        function closeModal() {
+            document.getElementById('islandModal').classList.remove('active');
+        }
+
+        function updateDashboards() {
+            const completed = progress.completed.length;
+            const total = islands.length;
+            const percentage = Math.round((completed / total) * 100);
+
+            document.getElementById('completedLessons').textContent = `${completed}/${total}`;
+            document.getElementById('totalProgress').textContent = percentage + '%';
+            
+            let currentWorldName = 'Spawn Punkt';
+            if (completed > 0) currentWorldName = 'Block Coding Insel';
+            document.getElementById('currentWorld').textContent = currentWorldName;
+
+            const progressContainer = document.getElementById('studentProgress');
+            progressContainer.innerHTML = '';
+            
+            islands.forEach(island => {
+                const isCompleted = progress.completed.includes(island.id);
+                const progressPercent = isCompleted ? 100 : 0;
+                
+                const div = document.createElement('div');
+                div.className = 'progress-item';
+                div.innerHTML = `
+                    <span style="width: 30%;">${island.emoji} ${island.name}</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${progressPercent}%"></div>
+                    </div>
+                    <span style="font-size: 1.5rem;">${isCompleted ? '✅' : '⏳'}</span>
+                `;
+                progressContainer.appendChild(div);
+            });
+
+            document.getElementById('avgProgress').textContent = percentage + '%';
+
+            const studentsData = [
+                { name: 'Steve', progress: percentage, lastActive: 'Heute', status: '🟢 Online' },
+                { name: 'Alex', progress: Math.max(0, percentage - 15), lastActive: 'Gestern', status: '🟢 Online' },
+                { name: 'Creeper_Hunter', progress: Math.max(0, percentage - 30), lastActive: 'Vor 2 Tagen', status: '⚪ Offline' }
+            ];
+
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = '';
+            studentsData.forEach(student => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.progress}%</td>
+                    <td>${student.lastActive}</td>
+                    <td>${student.status}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        renderIslands();
+        updateDashboards();
+        
+        // Show world selector on start
+        showingIslands = false;
+    </script>
+</body>
+</html>
