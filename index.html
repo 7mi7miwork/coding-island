@@ -487,6 +487,11 @@
     <div class="header">
         <h1>⛏️ CODING ISLAND ⛏️</h1>
         <div class="nav-buttons">
+            <select class="btn btn-admin" onchange="changeLanguage(this.value)" style="cursor: pointer;">
+                <option value="en">🌍 English</option>
+                <option value="de">🌍 Deutsch</option>
+                <option value="zh">🌍 繁體中文</option>
+            </select>
             <button class="btn btn-overworld" onclick="showView('worlds')">Welten</button>
             <button class="btn btn-nether" onclick="showView('student')">Spieler Stats</button>
             <button class="btn btn-admin" onclick="showView('admin')">Admin</button>
@@ -589,6 +594,264 @@
     </div>
 
     <script>
+        // Translations
+        const translations = {
+            en: {
+                title: "⚔️ YOUR CODING JOURNEY ⚔️",
+                spawnPoint: "SPAWN POINT",
+                spawnDesc: "Level 0: Minecraft Education Setup",
+                blockCodingIsland: "BLOCK CODING ISLAND",
+                blockCodingDesc: "Level 1-15: MakeCode Block Programming",
+                btnWorlds: "Worlds",
+                btnStudent: "Player Stats",
+                btnAdmin: "Admin",
+                studentDashboard: "📊 PLAYER STATISTICS 📊",
+                completedLevels: "💎 Completed Levels",
+                totalProgress: "📈 Total Progress",
+                currentWorld: "🗺️ Current World",
+                yourProgress: "🎯 YOUR PROGRESS 🎯",
+                adminConsole: "👑 ADMIN CONSOLE 👑",
+                registeredPlayers: "👥 Registered Players",
+                avgProgress: "📊 Avg. Progress",
+                activeLevels: "🎮 Active Levels",
+                playerOverview: "📋 PLAYER OVERVIEW 📋",
+                player: "🎮 Player",
+                progress: "📈 Progress",
+                lastActivity: "⏰ Last Activity",
+                status: "✨ Status",
+                today: "Today",
+                yesterday: "Yesterday",
+                daysAgo: "days ago",
+                online: "🟢 Online",
+                offline: "⚪ Offline",
+                welcomeSpawn: "🎓 Welcome to the Spawn Point!",
+                welcomeDesc: "Here you begin your Minecraft Education coding journey. Complete all tasks to proceed.",
+                tasks: "📋 Tasks:",
+                taskWindows: "⚙️ Understand Windows basics",
+                taskDownload: "📥 Download Minecraft Education",
+                taskInstall: "💿 Install Minecraft Education",
+                taskLogin: "🔑 Log in with student account",
+                taskCodeBuilder: "🌍 Activate Code Builder",
+                taskWorld: "📦 Download example world",
+                taskImport: "📂 Import world",
+                taskFirstSteps: "🎮 Take first steps in the world",
+                levelDesc: "📚 {desc}",
+                levelInfo: "This level covers important programming concepts with Minecraft Education MakeCode Block Coding.",
+                levelStatus: "🎯 Status:",
+                completed: "✅ Completed",
+                inProgress: "⏳ In Progress",
+                markIncomplete: "❌ Mark as incomplete",
+                markComplete: "✅ Mark as complete",
+                spawnPointWorld: "Spawn Point",
+                blockCodingWorld: "Block Coding Island"
+            },
+            de: {
+                title: "⚔️ DEINE CODING REISE ⚔️",
+                spawnPoint: "SPAWN PUNKT",
+                spawnDesc: "Level 0: Minecraft Education Setup",
+                blockCodingIsland: "BLOCK CODING INSEL",
+                blockCodingDesc: "Level 1-15: MakeCode Block Programmierung",
+                btnWorlds: "Welten",
+                btnStudent: "Spieler Stats",
+                btnAdmin: "Admin",
+                studentDashboard: "📊 SPIELER STATISTIKEN 📊",
+                completedLevels: "💎 Abgeschlossene Levels",
+                totalProgress: "📈 Gesamtfortschritt",
+                currentWorld: "🗺️ Aktuelle Welt",
+                yourProgress: "🎯 DEIN FORTSCHRITT 🎯",
+                adminConsole: "👑 ADMIN KONSOLE 👑",
+                registeredPlayers: "👥 Registrierte Spieler",
+                avgProgress: "📊 Ø Fortschritt",
+                activeLevels: "🎮 Aktive Levels",
+                playerOverview: "📋 SPIELERÜBERSICHT 📋",
+                player: "🎮 Spieler",
+                progress: "📈 Fortschritt",
+                lastActivity: "⏰ Letzte Aktivität",
+                status: "✨ Status",
+                today: "Heute",
+                yesterday: "Gestern",
+                daysAgo: "Tagen",
+                online: "🟢 Online",
+                offline: "⚪ Offline",
+                welcomeSpawn: "🎓 Willkommen am Spawn Punkt!",
+                welcomeDesc: "Hier beginnst du deine Minecraft Education Coding-Reise. Erledige alle Aufgaben, um fortzufahren.",
+                tasks: "📋 Aufgaben:",
+                taskWindows: "⚙️ Windows-Grundlagen verstehen",
+                taskDownload: "📥 Minecraft Education herunterladen",
+                taskInstall: "💿 Minecraft Education installieren",
+                taskLogin: "🔑 Mit Studenten-Account einloggen",
+                taskCodeBuilder: "🌍 Code Builder aktivieren",
+                taskWorld: "📦 Beispielwelt herunterladen",
+                taskImport: "📂 Welt importieren",
+                taskFirstSteps: "🎮 Erste Schritte in der Welt",
+                levelDesc: "📚 {desc}",
+                levelInfo: "Dieser Level behandelt wichtige Programmierkonzepte mit Minecraft Education MakeCode Block Coding.",
+                levelStatus: "🎯 Status:",
+                completed: "✅ Abgeschlossen",
+                inProgress: "⏳ In Bearbeitung",
+                markIncomplete: "❌ Als unvollständig markieren",
+                markComplete: "✅ Als abgeschlossen markieren",
+                spawnPointWorld: "Spawn Punkt",
+                blockCodingWorld: "Block Coding Insel"
+            },
+            zh: {
+                title: "⚔️ 你的程式之旅 ⚔️",
+                spawnPoint: "重生點",
+                spawnDesc: "等級 0：Minecraft Education 設定",
+                blockCodingIsland: "方塊程式島",
+                blockCodingDesc: "等級 1-15：MakeCode 方塊程式設計",
+                btnWorlds: "世界",
+                btnStudent: "玩家統計",
+                btnAdmin: "管理員",
+                studentDashboard: "📊 玩家統計資料 📊",
+                completedLevels: "💎 已完成等級",
+                totalProgress: "📈 總進度",
+                currentWorld: "🗺️ 目前世界",
+                yourProgress: "🎯 你的進度 🎯",
+                adminConsole: "👑 管理員控制台 👑",
+                registeredPlayers: "👥 註冊玩家",
+                avgProgress: "📊 平均進度",
+                activeLevels: "🎮 啟用等級",
+                playerOverview: "📋 玩家總覽 📋",
+                player: "🎮 玩家",
+                progress: "📈 進度",
+                lastActivity: "⏰ 最後活動",
+                status: "✨ 狀態",
+                today: "今天",
+                yesterday: "昨天",
+                daysAgo: "天前",
+                online: "🟢 線上",
+                offline: "⚪ 離線",
+                welcomeSpawn: "🎓 歡迎來到重生點！",
+                welcomeDesc: "在這裡開始你的 Minecraft Education 程式之旅。完成所有任務以繼續。",
+                tasks: "📋 任務：",
+                taskWindows: "⚙️ 了解 Windows 基礎知識",
+                taskDownload: "📥 下載 Minecraft Education",
+                taskInstall: "💿 安裝 Minecraft Education",
+                taskLogin: "🔑 使用學生帳戶登入",
+                taskCodeBuilder: "🌍 啟用 Code Builder",
+                taskWorld: "📦 下載範例世界",
+                taskImport: "📂 匯入世界",
+                taskFirstSteps: "🎮 在世界中邁出第一步",
+                levelDesc: "📚 {desc}",
+                levelInfo: "此等級涵蓋使用 Minecraft Education MakeCode 方塊程式設計的重要程式設計概念。",
+                levelStatus: "🎯 狀態：",
+                completed: "✅ 已完成",
+                inProgress: "⏳ 進行中",
+                markIncomplete: "❌ 標記為未完成",
+                markComplete: "✅ 標記為已完成",
+                spawnPointWorld: "重生點",
+                blockCodingWorld: "方塊程式島"
+            }
+        };
+
+        const islandTranslations = {
+            en: {
+                "Spawn Punkt": "Spawn Point",
+                "Crafting Table": "Crafting Table",
+                "Mine Entrance": "Mine Entrance",
+                "Redstone Circuit": "Redstone Circuit",
+                "Village Gate": "Village Gate",
+                "Enchanting Room": "Enchanting Room",
+                "Portal Hub": "Portal Hub",
+                "Fortress Bridge": "Fortress Bridge",
+                "Blaze Tower": "Blaze Tower",
+                "Soul Sand Valley": "Soul Sand Valley",
+                "Bastion Ruins": "Bastion Ruins",
+                "End Gateway": "End Gateway",
+                "Chorus Garden": "Chorus Garden",
+                "Shulker City": "Shulker City",
+                "Dragon Arena": "Dragon Arena",
+                "End Credits": "End Credits",
+                "Windows & Minecraft Education Setup": "Windows & Minecraft Education Setup",
+                "MakeCode Grundlagen": "MakeCode Basics",
+                "Sequenzen & Befehle": "Sequences & Commands",
+                "Schleifen": "Loops",
+                "Bedingungen": "Conditions",
+                "Variablen": "Variables",
+                "Funktionen": "Functions",
+                "Arrays & Listen": "Arrays & Lists",
+                "Events": "Events",
+                "Debugging": "Debugging",
+                "Koordinaten": "Coordinates",
+                "Logik & Operatoren": "Logic & Operators",
+                "Muster & Algorithmen": "Patterns & Algorithms",
+                "Agent Programmierung": "Agent Programming",
+                "Komplexe Projekte": "Complex Projects",
+                "Meisterprojekt": "Master Project"
+            },
+            de: {
+                "Spawn Punkt": "Spawn Punkt",
+                "Crafting Table": "Werkbank",
+                "Mine Entrance": "Minen-Eingang",
+                "Redstone Circuit": "Redstone-Schaltkreis",
+                "Village Gate": "Dorftor",
+                "Enchanting Room": "Verzauberungs-Raum",
+                "Portal Hub": "Portal-Zentrale",
+                "Fortress Bridge": "Festungs-Brücke",
+                "Blaze Tower": "Lohen-Turm",
+                "Soul Sand Valley": "Seelensand-Tal",
+                "Bastion Ruins": "Bastion-Ruinen",
+                "End Gateway": "End-Portal",
+                "Chorus Garden": "Chorus-Garten",
+                "Shulker City": "Shulker-Stadt",
+                "Dragon Arena": "Drachen-Arena",
+                "End Credits": "Abspann",
+                "Windows & Minecraft Education Setup": "Windows & Minecraft Education Setup",
+                "MakeCode Grundlagen": "MakeCode Grundlagen",
+                "Sequenzen & Befehle": "Sequenzen & Befehle",
+                "Schleifen": "Schleifen",
+                "Bedingungen": "Bedingungen",
+                "Variablen": "Variablen",
+                "Funktionen": "Funktionen",
+                "Arrays & Listen": "Arrays & Listen",
+                "Events": "Events",
+                "Debugging": "Debugging",
+                "Koordinaten": "Koordinaten",
+                "Logik & Operatoren": "Logik & Operatoren",
+                "Muster & Algorithmen": "Muster & Algorithmen",
+                "Agent Programmierung": "Agent Programmierung",
+                "Komplexe Projekte": "Komplexe Projekte",
+                "Meisterprojekt": "Meisterprojekt"
+            },
+            zh: {
+                "Spawn Punkt": "重生點",
+                "Crafting Table": "工作台",
+                "Mine Entrance": "礦坑入口",
+                "Redstone Circuit": "紅石電路",
+                "Village Gate": "村莊大門",
+                "Enchanting Room": "附魔室",
+                "Portal Hub": "傳送門中心",
+                "Fortress Bridge": "要塞橋樑",
+                "Blaze Tower": "烈焰塔",
+                "Soul Sand Valley": "靈魂沙谷",
+                "Bastion Ruins": "堡壘遺跡",
+                "End Gateway": "終界折躍門",
+                "Chorus Garden": "紫頌花園",
+                "Shulker City": "界伏蚌城市",
+                "Dragon Arena": "龍之競技場",
+                "End Credits": "終界結局",
+                "Windows & Minecraft Education Setup": "Windows 與 Minecraft Education 設定",
+                "MakeCode Grundlagen": "MakeCode 基礎",
+                "Sequenzen & Befehle": "序列與指令",
+                "Schleifen": "迴圈",
+                "Bedingungen": "條件",
+                "Variablen": "變數",
+                "Funktionen": "函數",
+                "Arrays & Listen": "陣列與列表",
+                "Events": "事件",
+                "Debugging": "除錯",
+                "Koordinaten": "座標",
+                "Logik & Operatoren": "邏輯與運算子",
+                "Muster & Algorithmen": "模式與演算法",
+                "Agent Programmierung": "代理程式設計",
+                "Komplexe Projekte": "複雜專案",
+                "Meisterprojekt": "大師專案"
+            }
+        };
+
+        let currentLang = 'en';
+
         const islands = [
             // Spawn Punkt
             { id: 0, name: "Spawn Punkt", emoji: "🏠", world: "spawn", desc: "Windows & Minecraft Education Setup" },
@@ -630,6 +893,49 @@
             completed: [],
             level0Tasks: []
         };
+
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
+
+        function tIsland(text) {
+            return islandTranslations[currentLang][text] || text;
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('codingIslandLang', lang);
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update navigation buttons
+            document.querySelectorAll('.btn-overworld')[0].textContent = t('btnWorlds');
+            document.querySelectorAll('.btn-nether')[0].textContent = t('btnStudent');
+            document.querySelectorAll('.btn-admin')[1].textContent = t('btnAdmin');
+
+            // Update world selection
+            updateWorldsView();
+            updateDashboards();
+            if (showingIslands) {
+                renderIslands();
+            }
+        }
+
+        function updateWorldsView() {
+            const worldTitle = document.querySelector('#worlds .mc-title');
+            if (worldTitle) worldTitle.textContent = t('title');
+
+            const worldCards = document.querySelectorAll('.world-card');
+            if (worldCards[0]) {
+                worldCards[0].querySelector('.world-title').textContent = t('spawnPoint');
+                worldCards[0].querySelector('.world-description').textContent = t('spawnDesc');
+            }
+            if (worldCards[1]) {
+                worldCards[1].querySelector('.world-title').textContent = t('blockCodingIsland');
+                worldCards[1].querySelector('.world-description').textContent = t('blockCodingDesc');
+            }
+        }
 
         function saveProgress() {
             localStorage.setItem('codingIslandProgress', JSON.stringify(progress));
@@ -675,8 +981,8 @@
                 card.innerHTML = `
                     <div class="island-level">${island.id}</div>
                     <div class="island-icon">${island.emoji}</div>
-                    <div class="island-name">${island.name}</div>
-                    <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">${island.desc}</div>
+                    <div class="island-name">${tIsland(island.name)}</div>
+                    <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">${tIsland(island.desc)}</div>
                 `;
 
                 if (!isLocked) {
@@ -780,11 +1086,24 @@
             document.getElementById('completedLessons').textContent = `${completed}/${total}`;
             document.getElementById('totalProgress').textContent = percentage + '%';
             
-            let currentWorldName = 'Spawn Punkt';
-            if (completed > 0) currentWorldName = 'Block Coding Insel';
+            let currentWorldName = t('spawnPointWorld');
+            if (completed > 0) currentWorldName = t('blockCodingWorld');
             document.getElementById('currentWorld').textContent = currentWorldName;
 
+            // Update student dashboard title
+            const studentTitle = document.querySelector('#student .mc-title');
+            if (studentTitle) studentTitle.textContent = t('studentDashboard');
+
+            // Update stat labels
+            const statLabels = document.querySelectorAll('#student .stat-label');
+            if (statLabels[0]) statLabels[0].textContent = t('completedLevels');
+            if (statLabels[1]) statLabels[1].textContent = t('totalProgress');
+            if (statLabels[2]) statLabels[2].textContent = t('currentWorld');
+
             const progressContainer = document.getElementById('studentProgress');
+            const progressTitle = document.querySelector('#student .progress-list .mc-title');
+            if (progressTitle) progressTitle.textContent = t('yourProgress');
+            
             progressContainer.innerHTML = '';
             
             islands.forEach(island => {
@@ -794,7 +1113,7 @@
                 const div = document.createElement('div');
                 div.className = 'progress-item';
                 div.innerHTML = `
-                    <span style="width: 30%;">${island.emoji} ${island.name}</span>
+                    <span style="width: 30%;">${island.emoji} ${tIsland(island.name)}</span>
                     <div class="progress-bar-container">
                         <div class="progress-bar" style="width: ${progressPercent}%"></div>
                     </div>
@@ -805,10 +1124,22 @@
 
             document.getElementById('avgProgress').textContent = percentage + '%';
 
+            // Update admin dashboard
+            const adminTitle = document.querySelector('#admin .mc-title');
+            if (adminTitle) adminTitle.textContent = t('adminConsole');
+
+            const adminLabels = document.querySelectorAll('#admin .stat-label');
+            if (adminLabels[0]) adminLabels[0].textContent = t('registeredPlayers');
+            if (adminLabels[1]) adminLabels[1].textContent = t('avgProgress');
+            if (adminLabels[2]) adminLabels[2].textContent = t('activeLevels');
+
+            const tableTitle = document.querySelector('#admin h3.mc-title');
+            if (tableTitle) tableTitle.textContent = t('playerOverview');
+
             const studentsData = [
-                { name: 'Steve', progress: percentage, lastActive: 'Heute', status: '🟢 Online' },
-                { name: 'Alex', progress: Math.max(0, percentage - 15), lastActive: 'Gestern', status: '🟢 Online' },
-                { name: 'Creeper_Hunter', progress: Math.max(0, percentage - 30), lastActive: 'Vor 2 Tagen', status: '⚪ Offline' }
+                { name: 'Steve', progress: percentage, lastActive: t('today'), status: t('online') },
+                { name: 'Alex', progress: Math.max(0, percentage - 15), lastActive: t('yesterday'), status: t('online') },
+                { name: 'Creeper_Hunter', progress: Math.max(0, percentage - 30), lastActive: `2 ${t('daysAgo')}`, status: t('offline') }
             ];
 
             const tbody = document.getElementById('studentsTableBody');
@@ -823,10 +1154,23 @@
                 `;
                 tbody.appendChild(tr);
             });
+
+            // Update table headers
+            const headers = document.querySelectorAll('.mc-table th');
+            if (headers[0]) headers[0].textContent = t('player');
+            if (headers[1]) headers[1].textContent = t('progress');
+            if (headers[2]) headers[2].textContent = t('lastActivity');
+            if (headers[3]) headers[3].textContent = t('status');
         }
 
+        // Initialize
+        const savedLang = localStorage.getItem('codingIslandLang') || 'en';
+        currentLang = savedLang;
+        document.querySelector('select').value = savedLang;
+        
         renderIslands();
         updateDashboards();
+        updateUI();
         
         // Show world selector on start
         showingIslands = false;
